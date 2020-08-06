@@ -6,6 +6,8 @@ import Poster from "../../components/Poster";
 import ScrollContainer from "../../components/ScrollContainer";
 import Votes from "../../components/Votes";
 import { formatData } from "../../utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Link from "../../components/Detail/Link";
 
 const Header = styled.View`
   height: ${Dimensions.get("window").height / 3}px;
@@ -56,7 +58,7 @@ const DataValue = styled.Text`
   opacity: 0.8;
 `;
 
-export default ({ result, loading }) => {
+export default ({ result, loading, openBrowser }) => {
   return (
     <ScrollContainer loading={false} contentContainerStyle={{ paddingBottom: 80 }}>
       <Header>
@@ -121,6 +123,26 @@ export default ({ result, loading }) => {
             <DataValue>
               {result.number_of_seasons} / {result.number_of_episodes}
             </DataValue>
+          </>
+        )}
+        {result.imdb_id && (
+          <Link
+            onPress={() => openBrowser(`https://www.imdb.com/title/${result.imdb_id}`)}
+            text={"IMDB Page"}
+            icon="imdb"
+          />
+        )}
+        {result.videos.results.length > 0 && (
+          <>
+            <DataName>Videos</DataName>
+            {result.videos.results.map(video => (
+              <Link
+                text={video.name}
+                key={video.id}
+                icon="youtube-play"
+                onPress={() => openBrowser(`https://www.youtube.com/watch?v=${video.key}`)}
+              />
+            ))}
           </>
         )}
       </Data>
